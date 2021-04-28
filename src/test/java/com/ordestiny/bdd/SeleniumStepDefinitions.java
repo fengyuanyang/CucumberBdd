@@ -1,17 +1,16 @@
 package com.ordestiny.bdd;
 
 import io.cucumber.java.After;
+import io.cucumber.java.Scenario;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class SeleniumSteps {
+public class SeleniumStepDefinitions {
     {
         System.setProperty("webdriver.chrome.driver", "/Users/fengyuanyang/Downloads/chromedriver");
     }
@@ -44,9 +43,14 @@ public class SeleniumSteps {
     }
 
     @After()
-    public void closeBrowser() {
-        if (driver!= null)
-            driver.quit();
-    }
+    public void closeBrowser(Scenario scenario) {
 
+        if (driver!= null) {
+            if (scenario.isFailed()) {
+                byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+                scenario.attach(screenshot, "image/png", "name");
+            }
+            driver.quit();
+        }
+    }
 }
