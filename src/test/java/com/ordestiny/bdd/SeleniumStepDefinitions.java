@@ -20,6 +20,8 @@ public class SeleniumStepDefinitions {
     public void I_visit_google() {
         driver = new ChromeDriver();
         driver.get("https://www.google.com");
+        System.out.format("Thread ID - %2d",
+                Thread.currentThread().getId());
     }
 
     @When("I search for {string}")

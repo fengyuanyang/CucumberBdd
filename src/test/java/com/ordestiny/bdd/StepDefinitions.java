@@ -22,6 +22,8 @@ public class StepDefinitions {
 
     @Given("today is {string}")
     public void today_is(String today) {
+        System.out.format("Thread ID - %2d",
+                Thread.currentThread().getId());
         this.today = today;
     }
 
