@@ -6,7 +6,9 @@ import com.ordestiny.bdd.provider.ConfigReader;
 import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 
 public class WebDriverManager {
   private WebDriver driver;
@@ -40,11 +42,14 @@ public class WebDriverManager {
 
   private WebDriver createLocalDriver() {
     switch (driverType) {
-      case FIREFOX : driver = new FirefoxDriver();
+      case FIREFOX :
+        driver = new FirefoxDriver(new FirefoxOptions().
+                setAcceptInsecureCerts(ConfigReader.getInstance().getAcceptInsecureCerts()));
         break;
       case CHROME :
         System.setProperty(CHROME_DRIVER_PROPERTY, ConfigReader.getInstance().getDriverPath());
-        driver = new ChromeDriver();
+        driver = new ChromeDriver(new ChromeOptions().
+                setAcceptInsecureCerts(ConfigReader.getInstance().getAcceptInsecureCerts()));
         break;
     }
 

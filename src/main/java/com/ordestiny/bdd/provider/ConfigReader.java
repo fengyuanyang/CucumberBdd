@@ -32,14 +32,14 @@ public class ConfigReader {
       }
     } catch (FileNotFoundException e) {
       e.printStackTrace();
-      throw new RuntimeException("Configuration.properties not found at " + propertyFilePath);
+      throw new RuntimeException("config.properties not found at " + propertyFilePath);
     }
   }
 
   public String getDriverPath(){
     String driverPath = properties.getProperty("driverPath");
     if(driverPath!= null) return driverPath;
-    else throw new RuntimeException("Driver Path not specified in the Configuration.properties file for the Key:driverPath");
+    else throw new RuntimeException("Driver Path not specified in the config.properties file for the Key:driverPath");
   }
 
   public long getImplicitlyWait() {
@@ -57,26 +57,32 @@ public class ConfigReader {
   public String getApplicationUrl() {
     String url = properties.getProperty("url");
     if(url != null) return url;
-    else throw new RuntimeException("Application Url not specified in the Configuration.properties file for the Key:url");
+    else throw new RuntimeException("Application Url not specified in the config.properties file for the Key:url");
   }
 
   public DriverType getBrowser() {
     String browserName = properties.getProperty("browser");
     if(browserName == null || browserName.equals("chrome")) return DriverType.CHROME;
     else if(browserName.equalsIgnoreCase("firefox")) return DriverType.FIREFOX;
-    else throw new RuntimeException("Browser Name Key value in Configuration.properties is not matched : " + browserName);
+    else throw new RuntimeException("Browser Name Key value in config.properties is not matched : " + browserName);
   }
 
   public EnvironmentType getEnvironment() {
     String environmentName = properties.getProperty("environment");
     if(environmentName == null || environmentName.equalsIgnoreCase("local")) return EnvironmentType.LOCAL;
     else if(environmentName.equals("remote")) return EnvironmentType.REMOTE;
-    else throw new RuntimeException("Environment Type Key value in Configuration.properties is not matched : " + environmentName);
+    else throw new RuntimeException("Environment Type Key value in config.properties is not matched : " + environmentName);
   }
 
   public Boolean getBrowserWindowSize() {
     String windowSize = properties.getProperty("windowMaximize");
     if(windowSize != null) return Boolean.valueOf(windowSize);
+    return true;
+  }
+
+  public Boolean getAcceptInsecureCerts() {
+    String acceptInsecureCerts = properties.getProperty("acceptInsecureCerts");
+    if(acceptInsecureCerts != null) return Boolean.valueOf(acceptInsecureCerts);
     return true;
   }
 
