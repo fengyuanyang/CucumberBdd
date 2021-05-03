@@ -6,19 +6,17 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.*;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class SeleniumStepDefinitions {
-    {
-        System.setProperty("webdriver.chrome.driver", "/Users/fengyuanyang/Downloads/chromedriver");
-    }
     private WebDriver driver;
+    private WebDriverManager manager;
 
     @Given("I am on the Google search page")
     public void I_visit_google() {
-        driver = new ChromeDriver();
+        manager = new WebDriverManager();
+        driver = manager.getDriver();
         driver.get("https://www.google.com");
         System.out.format("Thread ID - %2d",
                 Thread.currentThread().getId());
@@ -52,7 +50,7 @@ public class SeleniumStepDefinitions {
                 byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
                 scenario.attach(screenshot, "image/png", "name");
             }
-            driver.quit();
+            manager.closeDriver();
         }
     }
 }
