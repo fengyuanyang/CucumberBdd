@@ -33,5 +33,11 @@ ex.
 driverPath=D:\\driver\\chromedriver_win32\\chromedriver.exe
 ```
 
-Run all the tests
+Run all the tests    
 ```mvn verify```
+
+Check reports    
+```
+/target/reports/cucumber-reports.html
+/target/reports/index.html
+```
