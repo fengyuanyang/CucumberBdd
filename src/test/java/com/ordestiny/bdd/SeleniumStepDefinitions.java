@@ -11,11 +11,11 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class SeleniumStepDefinitions {
     private WebDriver driver;
-    private WebDriverManager manager;
+    private WebDriverFactory manager;
 
     @Given("I am on the Google search page")
     public void I_visit_google() {
-        manager = new WebDriverManager();
+        manager = new WebDriverFactory();
         driver = manager.getDriver();
         driver.get("https://www.google.com");
         System.out.format("Thread ID - %2d",

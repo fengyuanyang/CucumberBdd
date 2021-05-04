@@ -50,6 +50,13 @@
             <version>${jasypt.version}</version>
             <scope>compile</scope>
         </dependency>
+
+        <dependency>
+            <groupId>io.github.bonigarcia</groupId>
+            <artifactId>webdrivermanager</artifactId>
+            <version>4.4.1</version>
+        </dependency>
+
     </dependencies>
 
     <build>
