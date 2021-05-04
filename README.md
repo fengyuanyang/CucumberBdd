@@ -8,7 +8,7 @@
 [What is cucumber](https://cucumber.io/docs/guides/overview/)    
 Briefly:Cucumber is a tool that supports Behaviour-Driven Development(BDD).
 
-[What is Selenium](https://www.selenium.dev/)
+[What is Selenium](https://www.selenium.dev/)    
 Briefly: Selenium automates browsers
 
 Prerequisites
