@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Properties;
 
-
 public class ConfigReader {
   private Properties properties;
   private final String propertyFilePath= Paths.get("src","test", "resources", "config.properties").toFile().getAbsolutePath();
@@ -86,4 +85,10 @@ public class ConfigReader {
     return true;
   }
 
+  public String getJasyptPassword() {
+    String password = properties.getProperty("jasypt.encryptor.password");
+
+    if(password != null) return password;
+    return "";
+  }
 }
