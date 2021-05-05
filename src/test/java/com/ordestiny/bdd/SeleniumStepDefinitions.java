@@ -10,32 +10,29 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class SeleniumStepDefinitions {
-    private WebDriver driver;
-    private WebDriverFactory manager;
+    private SharedWebDriver sharedWebDriver;
+
+    public SeleniumStepDefinitions(SharedWebDriver sharedWebDriver) {
+        this.sharedWebDriver = sharedWebDriver;
+    }
 
     @Given("I am on the Google search page")
     public void I_visit_google() {
-        manager = new WebDriverFactory();
-        driver = manager.getDriver();
-        driver.get("https://www.google.com");
+        sharedWebDriver.getOrCreateDriver().get("https://www.google.com");
         System.out.format("Thread ID - %2d",
                 Thread.currentThread().getId());
     }
 
     @When("I search for {string}")
     public void search_for(String query) {
-        WebElement element = driver.findElement(By.name("q"));
-        // Enter something to search for
+        WebElement element = sharedWebDriver.getOrCreateDriver().findElement(By.name("q"));
         element.sendKeys(query);
-        // Now submit the form. WebDriver will find the form for us from the element
         element.submit();
     }
 
     @Then("the page title should start with {string}")
     public void checkTitle(String titleStartsWith) {
-        // Google's search is rendered dynamically with JavaScript
-        // Wait for the page to load timeout after ten seconds
-        new WebDriverWait(driver,10L).until(new ExpectedCondition<Boolean>() {
+        new WebDriverWait(sharedWebDriver.getOrCreateDriver(),10L).until(new ExpectedCondition<Boolean>() {
             public Boolean apply(WebDriver d) {
                 return d.getTitle().toLowerCase().startsWith(titleStartsWith);
             }
@@ -44,13 +41,12 @@ public class SeleniumStepDefinitions {
 
     @After()
     public void closeBrowser(Scenario scenario) {
-
-        if (driver!= null) {
+        if (sharedWebDriver.getDriver()!= null) {
             if (scenario.isFailed()) {
-                byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+                byte[] screenshot = ((TakesScreenshot) sharedWebDriver.getOrCreateDriver()).getScreenshotAs(OutputType.BYTES);
                 scenario.attach(screenshot, "image/png", "name");
             }
-            manager.closeDriver();
+            sharedWebDriver.closeDriver();
         }
     }
 }
