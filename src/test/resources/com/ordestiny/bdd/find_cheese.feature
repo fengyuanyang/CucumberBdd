@@ -1,3 +1,4 @@
+#@example
 Feature: Could you find cheese?
   Everybody wants to get the best cheese
 
