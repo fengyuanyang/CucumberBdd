@@ -1,7 +1,7 @@
 package com.ordestiny.bdd.provider;
 
-import com.ordestiny.bdd.enums.DriverType;
 import com.ordestiny.bdd.enums.EnvironmentType;
+import io.github.bonigarcia.wdm.config.DriverManagerType;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -59,10 +59,10 @@ public class ConfigReader {
     else throw new RuntimeException("Application Url not specified in the config.properties file for the Key:url");
   }
 
-  public DriverType getBrowser() {
+  public DriverManagerType getBrowser() {
     String browserName = properties.getProperty("browser");
-    if(browserName == null || browserName.equals("chrome")) return DriverType.CHROME;
-    else if(browserName.equalsIgnoreCase("firefox")) return DriverType.FIREFOX;
+    if(browserName == null || browserName.equals("chrome")) return DriverManagerType.CHROME;
+    else if(browserName.equalsIgnoreCase("firefox")) return DriverManagerType.FIREFOX;
     else throw new RuntimeException("Browser Name Key value in config.properties is not matched : " + browserName);
   }
 

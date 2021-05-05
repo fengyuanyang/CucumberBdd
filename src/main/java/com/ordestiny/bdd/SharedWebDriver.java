@@ -1,8 +1,8 @@
 package com.ordestiny.bdd;
 
-import com.ordestiny.bdd.enums.DriverType;
 import com.ordestiny.bdd.enums.EnvironmentType;
 import com.ordestiny.bdd.provider.ConfigReader;
+import io.github.bonigarcia.wdm.config.DriverManagerType;
 import java.util.concurrent.TimeUnit;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
@@ -12,29 +12,27 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 
-public class WebDriverFactory {
-  private WebDriver driver;
-  private static DriverType driverType;
-  private static EnvironmentType environmentType;
-
-  public WebDriverFactory() {
-    driverType = ConfigReader.getInstance().getBrowser();
-    environmentType = ConfigReader.getInstance().getEnvironment();
-  }
+public class SharedWebDriver {
+  private static ThreadLocal<WebDriver> threadDriver = new ThreadLocal<>();
 
   public WebDriver getDriver() {
-    if(driver == null) driver = createDriver();
-    return driver;
+    return threadDriver.get();
   }
-
+  public WebDriver getOrCreateDriver() {
+    if(threadDriver.get() == null) {
+      threadDriver.set(createDriver());
+    }
+    return threadDriver.get();
+  }
   private WebDriver createDriver() {
+    EnvironmentType environmentType = ConfigReader.getInstance().getEnvironment();
     switch (environmentType) {
-      case LOCAL : driver = createLocalDriver();
+      case LOCAL : threadDriver.set(createLocalDriver());
         break;
-      case REMOTE : driver = createRemoteDriver();
+      case REMOTE : threadDriver.set(createRemoteDriver());
         break;
     }
-    return driver;
+    return threadDriver.get();
   }
 
   private WebDriver createRemoteDriver() {
@@ -42,6 +40,8 @@ public class WebDriverFactory {
   }
 
   private WebDriver createLocalDriver() {
+    WebDriver driver;
+    DriverManagerType driverType = ConfigReader.getInstance().getBrowser();
     switch (driverType) {
       case FIREFOX :
         WebDriverManager.firefoxdriver().setup();
@@ -57,6 +57,8 @@ public class WebDriverFactory {
         driver = new ChromeDriver(new ChromeOptions().
                 setAcceptInsecureCerts(ConfigReader.getInstance().getAcceptInsecureCerts()));
         break;
+      default:
+        return null;
     }
 
     if(ConfigReader.getInstance().getBrowserWindowSize()) driver.manage().window().maximize();
@@ -65,8 +67,9 @@ public class WebDriverFactory {
   }
 
   public void closeDriver() {
+    WebDriver driver = threadDriver.get();
     driver.close();
     driver.quit();
+    threadDriver.remove();
   }
-
 }
