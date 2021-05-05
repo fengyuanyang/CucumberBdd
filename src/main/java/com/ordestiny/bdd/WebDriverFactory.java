@@ -49,7 +49,11 @@ public class WebDriverFactory {
                 setAcceptInsecureCerts(ConfigReader.getInstance().getAcceptInsecureCerts()));
         break;
       case CHROME :
-        WebDriverManager.chromedriver().setup();
+        if (ConfigReader.getInstance().getDriverPath()!= null)
+          System.setProperty("webdriver.chrome.driver", ConfigReader.getInstance().getDriverPath());
+        else
+          WebDriverManager.chromedriver().setup();
+
         driver = new ChromeDriver(new ChromeOptions().
                 setAcceptInsecureCerts(ConfigReader.getInstance().getAcceptInsecureCerts()));
         break;
