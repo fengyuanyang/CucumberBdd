@@ -34,7 +34,10 @@ driverPath=D:\\driver\\chromedriver_win32\\chromedriver.exe
 ```
 
 Run all the tests    
-```mvn verify```
+```mvn clean verify``` or ```mvn clean integration-test```
+
+Run specific tests     
+```mvn clean verify -Dcucumber.filter.tags="@example"```
 
 Check reports    
 ```
